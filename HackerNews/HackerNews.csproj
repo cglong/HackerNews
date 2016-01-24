@@ -202,6 +202,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\HackerNews.Agent\HackerNews.Agent.csproj">
+      <Project>{f8478b44-ca42-42ce-8875-a14c91326b3c}</Project>
+      <Name>HackerNews.Agent</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HackerNews.API\HackerNews.API.csproj">
       <Project>{917063A1-7827-4A9F-A7B6-BC0D625817CE}</Project>
       <Name>HackerNews.API</Name>
