@@ -1,6 +1,11 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 using System.Windows;
+using System.Windows.Media;
 using Microsoft.Phone.Scheduler;
+using Microsoft.Phone.Shell;
+using HackerNews.API;
+using System;
 
 namespace HackerNews.Agent
 {
@@ -22,9 +27,31 @@ namespace HackerNews.Agent
             }
         }
 
-        protected override void OnInvoke(ScheduledTask task)
+        protected override async void OnInvoke(ScheduledTask task)
         {
-            NotifyComplete();
+            var client = new ServiceClient(Debugger.IsAttached);
+            await client.GetTopPosts(posts =>
+            {
+                var first = posts[0];
+                var tileData = new IconicTileData
+                {
+                    Title = "Hacker News",
+                    BackgroundColor = Color.FromArgb(255, 255, 102, 0),
+                    Count = posts.Count,
+                    IconImage = new Uri(@"Assets\Tiles\IconImage.png", UriKind.Relative),
+                    SmallIconImage = new Uri(@"Assets\Tiles\SmallIconImage.png", UriKind.Relative),
+                    WideContent1 = first.title,
+                    WideContent2 = first.description,
+                };
+
+                var mainTile = ShellTile.ActiveTiles.First();
+                if (mainTile != null)
+                {
+                    mainTile.Update(tileData);
+                }
+
+                NotifyComplete();
+            });
         }
     }
 }

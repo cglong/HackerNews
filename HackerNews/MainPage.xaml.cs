@@ -7,6 +7,7 @@ using HackerNews.API.Models;
 using HackerNews.Common;
 using Microsoft.Phone.Controls;
 using Windows.ApplicationModel.Store;
+using Microsoft.Phone.Scheduler;
 
 namespace HackerNews
 {
@@ -36,6 +37,18 @@ namespace HackerNews
             NewPosts = new ObservableCollection<Post>();
             ShowPosts = new ObservableCollection<Post>();
             AskPosts = new ObservableCollection<Post>();
+
+            var tilePeriodicTask = new PeriodicTask("PeriodicTask")
+            {
+                Description = "This updates the live tile with new posts.",
+            };
+            try
+            {
+                ScheduledActionService.Add(tilePeriodicTask);
+            }
+            catch (InvalidOperationException)
+            {
+            }
         }
 
         private void App_UnhandledExceptionHandled(object sender, ApplicationUnhandledExceptionEventArgs e)
